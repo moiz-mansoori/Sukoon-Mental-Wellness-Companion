@@ -64,142 +64,141 @@ def get_groq_client() -> Optional[Groq]:
  
  # Custom Styling
 def apply_custom_css():
-    """Apply custom CSS for a calming, modern UI."""
-    st.markdown(f"""
+    """Apply custom CSS for a calming, readable UI."""
+    st.markdown("""
     <style>
-        /* Main background and theme */
-        .stApp {{
-            background: linear-gradient(135deg, {THEME_COLORS["background"]} 0%, #1E2140 100%);
-        }}
+        /* Main background - softer, less dark */
+        .stApp {
+            background: #1e1e2e;
+        }
         
-        /* Sidebar styling */
-        [data-testid="stSidebar"] {{
-            background: linear-gradient(180deg, {THEME_COLORS["card_bg"]} 0%, #1A1D29 100%);
-        }}
+        /* Sidebar - cleaner, readable */
+        [data-testid="stSidebar"] {
+            background: #2a2a3e;
+        }
         
-        /* Chat message styling */
-        .stChatMessage {{
-            background-color: {THEME_COLORS["card_bg"]};
-            border-radius: 15px;
-            padding: 10px;
-            margin: 5px 0;
-        }}
+        /* All text should be bright and readable */
+        .stApp, .stApp p, .stApp span, .stApp div {
+            color: #f0f0f5 !important;
+        }
         
-        /* User message bubble */
-        [data-testid="stChatMessageContent"] {{
-            padding: 10px 15px;
-        }}
+        /* Sidebar text */
+        [data-testid="stSidebar"] * {
+            color: #e8e8f0 !important;
+        }
         
-        /* Button styling */
-        .stButton > button {{
-            background: linear-gradient(135deg, {THEME_COLORS["primary"]} 0%, #8B5CF6 100%);
-            color: white;
-            border: none;
-            border-radius: 25px;
-            padding: 10px 20px;
-            font-weight: 500;
-            transition: all 0.3s ease;
-        }}
+        /* Headers - clear and visible */
+        h1, h2, h3 {
+            color: #a5b4fc !important;
+            font-weight: 600 !important;
+            letter-spacing: -0.5px;
+        }
         
-        .stButton > button:hover {{
-            transform: translateY(-2px);
-            box-shadow: 0 5px 20px rgba(107, 115, 255, 0.4);
-        }}
+        h1 {
+            font-size: 2.2rem !important;
+            margin-bottom: 0.5rem !important;
+        }
         
-        /* Quick action buttons */
-        .quick-action {{
-            background: {THEME_COLORS["card_bg"]};
-            border-radius: 15px;
-            padding: 15px;
-            text-align: center;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            border: 1px solid rgba(255,255,255,0.1);
-        }}
+        /* Subheadings in sidebar */
+        [data-testid="stSidebar"] h3 {
+            color: #c7d2fe !important;
+            font-size: 1.1rem !important;
+            margin-top: 1rem !important;
+        }
         
-        .quick-action:hover {{
-            transform: translateY(-3px);
-            border-color: {THEME_COLORS["primary"]};
-        }}
+        /* Info boxes - higher contrast */
+        .stAlert {
+            background: #3a3a52 !important;
+            border: 1px solid #5a5a7a !important;
+            border-radius: 12px !important;
+        }
         
-        /* Disclaimer box */
-        .disclaimer-box {{
-            background: rgba(246, 173, 85, 0.1);
-            border-left: 4px solid {THEME_COLORS["warning"]};
-            padding: 15px;
-            border-radius: 0 10px 10px 0;
-            margin: 10px 0;
-        }}
+        .stAlert p {
+            color: #f5f5ff !important;
+            line-height: 1.7 !important;
+        }
         
-        /* Crisis helpline box */
-        .crisis-box {{
-            background: rgba(239, 68, 68, 0.1);
-            border-left: 4px solid #EF4444;
-            padding: 15px;
-            border-radius: 0 10px 10px 0;
-            margin: 10px 0;
-        }}
+        /* Chat messages - clear contrast */
+        .stChatMessage {
+            background: #2d2d42 !important;
+            border-radius: 12px;
+            padding: 12px;
+            margin: 8px 0;
+        }
         
-        /* Mood selector buttons */
-        .mood-btn {{
-            display: inline-block;
-            padding: 10px 15px;
-            margin: 5px;
-            border-radius: 20px;
-            background: {THEME_COLORS["card_bg"]};
-            border: 2px solid transparent;
-            transition: all 0.3s ease;
-        }}
+        [data-testid="stChatMessageContent"] p {
+            color: #f0f0f5 !important;
+            line-height: 1.6 !important;
+            font-size: 1rem !important;
+        }
         
-        .mood-btn:hover {{
-            border-color: {THEME_COLORS["primary"]};
-        }}
+        /* Buttons - visible and clickable */
+        .stButton > button {
+            background: #6366f1 !important;
+            color: white !important;
+            border: none !important;
+            border-radius: 20px !important;
+            padding: 10px 20px !important;
+            font-weight: 500 !important;
+            transition: all 0.2s ease;
+        }
         
-        .mood-btn.selected {{
-            border-color: {THEME_COLORS["secondary"]};
-            background: rgba(72, 187, 120, 0.2);
-        }}
+        .stButton > button:hover {
+            background: #818cf8 !important;
+            transform: translateY(-1px);
+        }
         
-        /* Technique cards */
-        .technique-card {{
-            background: {THEME_COLORS["card_bg"]};
-            border-radius: 15px;
-            padding: 20px;
-            margin: 10px 0;
-            border: 1px solid rgba(255,255,255,0.1);
-        }}
+        /* Input box - visible placeholder */
+        .stChatInput textarea {
+            background: #3a3a52 !important;
+            color: #f0f0f5 !important;
+            border: 1px solid #5a5a7a !important;
+            border-radius: 12px !important;
+        }
         
-        /* Breathing animation keyframes */
-        @keyframes breathe {{
-            0%, 100% {{ transform: scale(1); opacity: 0.8; }}
-            50% {{ transform: scale(1.1); opacity: 1; }}
-        }}
+        .stChatInput textarea::placeholder {
+            color: #a0a0b8 !important;
+        }
         
-        .breathing-indicator {{
-            animation: breathe 4s ease-in-out infinite;
-        }}
+        /* Dividers */
+        hr {
+            border-color: #4a4a6a !important;
+            margin: 1.5rem 0 !important;
+        }
         
-        /* Smooth scrollbar */
-        ::-webkit-scrollbar {{
+        /* Caption text */
+        .stCaption, small {
+            color: #b0b0c8 !important;
+        }
+        
+        /* Links */
+        a {
+            color: #93c5fd !important;
+        }
+        
+        /* Footer */
+        footer {
+            color: #8888a8 !important;
+        }
+        
+        /* Remove default Streamlit footer */
+        .stDeployButton {
+            display: none !important;
+        }
+        
+        /* Scrollbar */
+        ::-webkit-scrollbar {
             width: 8px;
-        }}
+        }
         
-        ::-webkit-scrollbar-track {{
-            background: {THEME_COLORS["background"]};
-        }}
+        ::-webkit-scrollbar-track {
+            background: #1e1e2e;
+        }
         
-        ::-webkit-scrollbar-thumb {{
-            background: {THEME_COLORS["primary"]};
+        ::-webkit-scrollbar-thumb {
+            background: #6366f1;
             border-radius: 4px;
-        }}
-        
-        /* Header styling */
-        h1 {{
-            background: linear-gradient(135deg, {THEME_COLORS["primary"]} 0%, {THEME_COLORS["accent"]} 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }}
+        }
     </style>
     """, unsafe_allow_html=True)
 
@@ -299,12 +298,6 @@ def render_sidebar():
         st.markdown("## 🕊️ Sukoon")
         st.markdown("*Your Mental Wellness Companion*")
         st.divider()
-        
-        # API Key status
-        if not GROQ_API_KEY:
-            st.warning("⚠️ Add your Groq API key to `.env` file")
-            st.markdown("[Get free API key →](https://console.groq.com)")
-            st.divider()
         
         # Mood Selection
         st.markdown("### How are you feeling?")
