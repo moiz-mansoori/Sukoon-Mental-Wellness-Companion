@@ -80,9 +80,81 @@ def apply_custom_css():
             background: #1e1e2e !important;
         }
         
+        /* Header area */
+        [data-testid="stHeader"] {
+            background: #1e1e2e !important;
+        }
+        
+        header {
+            background: #1e1e2e !important;
+        }
+        
         /* Bottom chat input area */
         [data-testid="stBottom"] {
             background: #1e1e2e !important;
+        }
+        
+        [data-testid="stBottomBlockContainer"] {
+            background: #1e1e2e !important;
+        }
+        
+        /* Footer area */
+        footer {
+            background: #1e1e2e !important;
+        }
+        
+        /* Chat input container - remove all gaps */
+        [data-testid="stChatInput"] {
+            background: #2a2a3e !important;
+            border: none !important;
+            border-radius: 25px !important;
+            box-shadow: none !important;
+            outline: none !important;
+            padding: 0 !important;
+            margin: 0 !important;
+        }
+        
+        [data-testid="stChatInput"] > div {
+            background: #2a2a3e !important;
+            border: none !important;
+            box-shadow: none !important;
+        }
+        
+        /* Remove focus ring */
+        [data-testid="stChatInput"]:focus-within {
+            border: none !important;
+            box-shadow: none !important;
+            outline: none !important;
+        }
+        
+        /* The actual textarea */
+        [data-testid="stChatInputTextArea"] {
+            background: #2a2a3e !important;
+            color: #f0f0f5 !important;
+            border: none !important;
+        }
+        
+        textarea {
+            background: #2a2a3e !important;
+            color: #f0f0f5 !important;
+            border: none !important;
+            box-shadow: none !important;
+            outline: none !important;
+        }
+        
+        textarea:focus {
+            border: none !important;
+            box-shadow: none !important;
+            outline: none !important;
+        }
+        
+        textarea::placeholder {
+            color: #a0a0b8 !important;
+        }
+        
+        /* Remove any white backgrounds */
+        .stApp > div, .main > div {
+            background: transparent !important;
         }
         
         /* Sidebar - cleaner, readable */
