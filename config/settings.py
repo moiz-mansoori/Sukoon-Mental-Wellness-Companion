@@ -5,14 +5,25 @@ and configurable parameters for the Mental Wellness Chatbot.
 """
 
 import os
+import streamlit as st
 from dotenv import load_dotenv
 
-# Load environment variables
+# Load environment variables (for local development)
 load_dotenv()
 
 # LLM MODEL CONFIGURATION
-# Using Groq API (ultra-low-latency cloud inference via LPU)
-GROQ_API_KEY = os.getenv("GROQ_API_KEY", "")
+# Try Streamlit secrets first (for cloud), then fall back to .env (for local)
+def get_api_key():
+    # First try Streamlit secrets (cloud deployment)
+    try:
+        if "GROQ_API_KEY" in st.secrets:
+            return st.secrets["GROQ_API_KEY"]
+    except:
+        pass
+    # Fall back to environment variable (local development)
+    return os.getenv("GROQ_API_KEY", "")
+
+GROQ_API_KEY = get_api_key()
 
 # Groq model settings - LLaMA 3.3 70B for high-quality empathetic responses
 GROQ_MODEL = "llama-3.3-70b-versatile"
