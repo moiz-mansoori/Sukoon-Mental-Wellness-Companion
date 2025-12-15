@@ -1,60 +1,116 @@
-# 🧠 Mental Health Support Agent Chatbot
+# Sukoon - Mental Wellness Companion
 
-Welcome to the **Mental Health Support Agent**, an AI-powered chatbot built using **Streamlit** and **Ollama's LLaMA 3** model. This tool provides emotional support, positive affirmations, and guided meditation to help users manage stress, anxiety, and feelings of depression.
+> *"Sukoon" means peace in Urdu. Everyone deserves a moment of calm.*
 
----
+Hey there 👋
 
-## 🏗️ Project Overview
+**Sukoon** is your AI companion for those moments when life feels heavy. Whether you're dealing with anxiety, stress, sadness, or just need someone to listen — Sukoon is here for you.
 
-This chatbot simulates a friendly and supportive conversation for individuals going through emotional challenges. Powered by **locally hosted LLMs** through Ollama, it ensures:
-
-- ✅ Fast response time  
-- ✅ Offline functionality  
-- ✅ Enhanced privacy with no external API calls
+No judgment. No pressure. Just support.
 
 ---
 
-## 🛠️ Tech Stack & Tools Used
+## What Can Sukoon Do?
 
-| Tool / Library     | Purpose                                                |
-|--------------------|--------------------------------------------------------|
-| `Python`           | Core programming language                              |
-| `Streamlit`        | Interactive frontend web interface                     |
-| `Ollama`           | LLM runtime engine to run local models like `llama3`   |
-| `llama3` model     | LLaMA 3 model used for generating AI responses         |
-| `base64`           | For loading and embedding custom background images     |
+**Listen & Respond** — Have a real conversation about what's on your mind. Sukoon understands context and responds with genuine empathy.
 
----
+**Match Your Mood** — Feeling anxious? Stressed? Sad? Select your mood and Sukoon adapts its approach to what you need most.
 
-## ✨ Features
-
-- 💬 **Conversational chat** with memory support using `llama3`
-- 🌟 **Positive affirmations** to uplift mental state
-- 🧘 **5-minute guided meditation** responses
-- 📜 Maintains **chat history** per session
-- 🎨 **Custom background support** via base64 encoding
+**Offer Quick Relief** — Sometimes you need something right away:
+- 🌬️ Breathing exercises to calm your nerves
+- 🌍 Grounding techniques to bring you back to the present
+- 💭 Ways to reframe negative thoughts
+- 📝 Journaling prompts to process emotions
+- ✨ Affirmations when you need a reminder of your worth
+- 🧘 Quick meditations for instant calm
 
 ---
 
-## 📷 Screenshot
+## Getting Started
 
-![Mental Health Chatbot](Project_review.png)
+**1. Get your free API key**
+→ Sign up at [console.groq.com](https://console.groq.com) (takes 2 minutes)
 
----
-
-## 🔧 Setup Instructions
-
-### ✅ Requirements
-
-- Python 3.8 to 3.11  
-  (⚠️ Python 3.12 may not work with some packages like `tokenizers`)
-- [Ollama](https://ollama.com/) installed on your system
-- Pull the LLaMA3 model using:
-
+**2. Set up the project**
 ```bash
-ollama pull llama3
-```
-### How to install from requirements.txt
-```bash
+git clone https://github.com/moiz-mansoori/AI-Mental-Wellness-Chatbot.git
+cd AI-Mental-Wellness-Chatbot
 pip install -r requirements.txt
 ```
+
+**3. Add your API key**
+Create a `.env` file:
+```
+GROQ_API_KEY=your_key_here
+```
+
+**4. Run it**
+```bash
+streamlit run app.py
+```
+
+That's it. Open `localhost:8501` and start talking.
+
+---
+
+## How It Works
+
+Sukoon uses **LLaMA 3.3** through Groq's ultra-fast infrastructure. Responses come back in milliseconds, not seconds — so conversations feel natural and fluid.
+
+The app also includes:
+- **Sentiment detection** to understand how you're feeling
+- **Crisis awareness** to respond appropriately when things get tough
+- **Conversation memory** so it remembers what you've shared
+
+---
+
+## A Note on Mental Health
+
+Sukoon is a companion, not a replacement for professional help.
+
+If you're going through something serious, please reach out to a therapist, counselor, or someone you trust. You deserve real support.
+
+---
+
+## Built With
+
+- **Streamlit** — Clean, simple interface
+- **Groq API** — Lightning-fast AI responses
+- **LLaMA 3.3 70B** — Smart, empathetic conversations
+- **TextBlob** — Understanding emotional context
+
+---
+
+## Project Structure
+
+```
+├── app.py                 # Main application
+├── config/
+│   └── settings.py        # Configuration & themes
+├── prompts/
+│   └── templates.py       # AI personality & responses
+├── utils/
+│   ├── sentiment.py       # Emotion detection
+│   ├── crisis_detector.py # Safety responses
+│   └── coping_techniques.py # Exercises & techniques
+├── .env                   # Your API key
+└── requirements.txt       # Dependencies
+```
+
+---
+
+## Want to Contribute?
+
+Pull requests are welcome! If you have ideas to make Sukoon better, feel free to open an issue or submit a PR.
+
+---
+
+## The Philosophy
+
+Mental wellness isn't about "fixing" yourself. It's about finding moments of peace amidst the chaos. Sukoon is here to help you find those moments.
+
+Take care of yourself. You matter. 💙
+
+---
+
+*Made with care by Moiz Mansoori*
