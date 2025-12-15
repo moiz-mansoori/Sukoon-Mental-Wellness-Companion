@@ -67,9 +67,22 @@ def apply_custom_css():
     """Apply custom CSS for a calming, readable UI."""
     st.markdown("""
     <style>
-        /* Main background - softer, less dark */
+        /* Main background - force dark theme everywhere */
         .stApp {
-            background: #1e1e2e;
+            background: #1e1e2e !important;
+        }
+        
+        .main .block-container {
+            background: #1e1e2e !important;
+        }
+        
+        [data-testid="stAppViewBlockContainer"] {
+            background: #1e1e2e !important;
+        }
+        
+        /* Bottom chat input area */
+        [data-testid="stBottom"] {
+            background: #1e1e2e !important;
         }
         
         /* Sidebar - cleaner, readable */
