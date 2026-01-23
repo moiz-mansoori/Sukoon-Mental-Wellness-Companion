@@ -7,6 +7,7 @@ for people dealing with depression, anxiety, and overthinking.
 import streamlit as st
 from groq import Groq
 from typing import Optional
+import os
 
 # Import local modules
 from config.settings import (
@@ -24,7 +25,6 @@ from prompts.templates import (
     SYSTEM_PROMPT,
     MOOD_PROMPTS,
     CONVERSATION_STARTERS,
-    TECHNIQUE_INTROS,
     CRISIS_RESPONSE
 )
 from utils import (
@@ -45,6 +45,14 @@ from utils import (
     get_affirmation,
     get_meditation,
     format_meditation
+)
+
+# RAG Imports
+from rag import (
+    EmbeddingService,
+    VectorStore,
+    WellnessRetriever,
+    index_knowledge_base
 )
 
 # PAGE CONFIGURATION
@@ -103,42 +111,59 @@ def apply_custom_css():
             background: #1e1e2e !important;
         }
         
-        /* Chat input container - remove all gaps */
+        /* Chat input container */
         [data-testid="stChatInput"] {
             background: #2a2a3e !important;
-            border: none !important;
+            border: 1px solid transparent !important; /* Base border for transition */
             border-radius: 25px !important;
             box-shadow: none !important;
             outline: none !important;
-            padding: 0 !important;
+            padding: 2px 10px !important;
             margin: 0 !important;
+            transition: all 0.3s ease !important;
         }
         
         [data-testid="stChatInput"] > div {
-            background: #2a2a3e !important;
+            background: transparent !important;
             border: none !important;
-            box-shadow: none !important;
         }
         
-        /* Remove focus ring */
+        /* Active Focus Indicator */
         [data-testid="stChatInput"]:focus-within {
-            border: none !important;
-            box-shadow: none !important;
-            outline: none !important;
+            border: 1px solid #6366f1 !important;
+            box-shadow: 0 0 15px rgba(99, 102, 241, 0.3) !important;
+            background: #31314d !important;
         }
-        
-        /* The actual textarea */
+
+        /* The actual textarea - add padding for search icon if needed */
         [data-testid="stChatInputTextArea"] {
-            background: #2a2a3e !important;
+            background: transparent !important;
             color: #f0f0f5 !important;
-            border: none !important;
+            padding-left: 5px !important;
+        }
+
+        /* Adding a subtle search icon on focus using background-image */
+        [data-testid="stChatInput"]:focus-within::before {
+            content: "🔍";
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 14px;
+            opacity: 0.7;
+            pointer-events: none;
+            z-index: 10;
         }
         
+        /* Adjust textarea padding when icon appears */
+        [data-testid="stChatInput"]:focus-within textarea {
+            padding-left: 35px !important;
+        }
+
         textarea {
-            background: #2a2a3e !important;
+            background: transparent !important;
             color: #f0f0f5 !important;
             border: none !important;
-            box-shadow: none !important;
             outline: none !important;
         }
         
@@ -284,6 +309,12 @@ def apply_custom_css():
             background: #6366f1;
             border-radius: 4px;
         }
+
+        /* Hide Streamlit default menu, search, and footer */
+        #MainMenu {visibility: hidden;}
+        header {visibility: hidden;}
+        footer {visibility: hidden;}
+        .stDeployButton {display:none !important;}
     </style>
     """, unsafe_allow_html=True)
 
@@ -297,7 +328,10 @@ def init_session_state():
         "show_disclaimer": True, # Show initial disclaimer
         "crisis_mode": False,    # Whether crisis was detected
         "conversation_started": False,  # Whether conversation has started
-        "conversation_history": []  # Groq conversation history
+        "conversation_history": [],  # Groq conversation history
+        "rag_initialized": False,     # Whether RAG vector store is index
+        "emotional_context": "",     # Hidden emotional memory
+        "conversation_themes": []    # Detected themes for continuity
     }
     
     for key, value in defaults.items():
@@ -331,10 +365,25 @@ def generate_response(user_message: str, mood_context: str = "") -> str:
     # Build context for the message
     context_parts = []
     
+    # 1. RAG Retrieval - Treat as lived wisdom
+    try:
+        if "retriever" in st.session_state:
+            results = st.session_state.retriever.retrieve(user_message)
+            rag_context = st.session_state.retriever.format_context_for_prompt(results)
+            if rag_context:
+                context_parts.append(f"[LIVED WISDOM & INSIGHTS]\n{rag_context}")
+    except Exception as e:
+        # Silent fail for RAG to maintain conversation flow
+        pass
+    
     if mood_context:
-        context_parts.append(f"[MOOD CONTEXT]\n{mood_context}")
+        context_parts.append(f"[EMOTIONAL TONE GUIDE]\n{mood_context}")
     
     context_parts.append(sentiment_context)
+    
+    # 3. Hidden Memory
+    if st.session_state.emotional_context:
+        context_parts.append(f"[HIDDEN MEMORY]\n{st.session_state.emotional_context}")
     
     # Combine context with user message
     enhanced_message = "\n\n".join(context_parts) + f"\n\n[USER MESSAGE]: {user_message}"
@@ -363,6 +412,14 @@ def generate_response(user_message: str, mood_context: str = "") -> str:
         )
         
         response_text = chat_completion.choices[0].message.content
+        
+        # Update hidden context and themes
+        if sentiment["emotional_intensity"] in ["moderate", "severe"]:
+            st.session_state.emotional_context = f"The user has been feeling {sentiment['emotional_intensity']} {', '.join(sentiment['detected_emotions'][:2])}."
+        
+        for emotion in sentiment["detected_emotions"]:
+            if emotion not in st.session_state.conversation_themes:
+                st.session_state.conversation_themes.append(emotion)
         
         # Update conversation history
         st.session_state.conversation_history.append({"role": "user", "content": user_message})
@@ -448,54 +505,48 @@ def handle_quick_action(action: str):
     if action == "breathing":
         exercise = get_breathing_exercise()
         content = format_breathing_exercise(exercise)
-        intro = TECHNIQUE_INTROS.get("breathing", "")
         st.session_state.messages.append({
             "role": "assistant",
-            "content": f"{intro}\n\n{content}"
+            "content": content
         })
     
     elif action == "grounding":
         exercise = get_grounding_exercise()
         content = format_grounding_exercise(exercise)
-        intro = TECHNIQUE_INTROS.get("grounding", "")
         st.session_state.messages.append({
             "role": "assistant",
-            "content": f"{intro}\n\n{content}"
+            "content": content
         })
     
     elif action == "cbt":
         technique = get_cbt_technique()
         content = format_cbt_technique(technique)
-        intro = TECHNIQUE_INTROS.get("cbt", "")
         st.session_state.messages.append({
             "role": "assistant",
-            "content": f"{intro}\n\n{content}"
+            "content": content
         })
     
     elif action == "journal":
         prompt = get_journal_prompt()
         content = format_journal_prompt(prompt)
-        intro = TECHNIQUE_INTROS.get("journal", "")
         st.session_state.messages.append({
             "role": "assistant",
-            "content": f"{intro}\n\n{content}"
+            "content": content
         })
     
     elif action == "affirmation":
         affirmation = get_affirmation()
-        intro = TECHNIQUE_INTROS.get("affirmation", "")
         st.session_state.messages.append({
             "role": "assistant",
-            "content": f"{intro}\n\n✨ {affirmation}"
+            "content": f"✨ {affirmation}"
         })
     
     elif action == "meditation":
         meditation = get_meditation()
         content = format_meditation(meditation)
-        intro = TECHNIQUE_INTROS.get("meditation", "")
         st.session_state.messages.append({
             "role": "assistant",
-            "content": f"{intro}\n\n{content}"
+            "content": content
         })
     
     st.rerun()
@@ -569,6 +620,32 @@ def main():
     
     # Initialize session state
     init_session_state()
+    
+    # Initialize RAG Components
+    if not st.session_state.rag_initialized:
+        with st.spinner("Preparing wellness wisdom..."):
+            try:
+                embeddings = EmbeddingService()
+                if not embeddings.api_key:
+                    # Silenced for cleaner UI during testing
+                    # st.warning("🕊️ **RAG is ready but waiting for an API key.** Please add `JINA_API_KEY` to your `.env` file to enable wellness wisdom search.")
+                    st.session_state.rag_initialized = True
+                    return
+
+                vector_store = VectorStore(persist_directory="./chroma_db")
+                vector_store.initialize_collection()
+                
+                # Index knowledge base if folder exists
+                kb_path = "./knowledge_base"
+                if os.path.exists(kb_path):
+                    index_knowledge_base(vector_store, embeddings, kb_path)
+                
+                st.session_state.retriever = WellnessRetriever(embeddings, vector_store)
+                st.session_state.rag_initialized = True
+            except Exception as e:
+                # Silenced for cleaner UI during testing
+                # st.error(f"Wellness engine notice: {str(e)}")
+                st.session_state.rag_initialized = True
     
     # Render sidebar
     render_sidebar()

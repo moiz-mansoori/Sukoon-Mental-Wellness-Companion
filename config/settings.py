@@ -32,6 +32,12 @@ GROQ_MODEL = "llama-3.3-70b-versatile"
 MAX_TOKENS = 500
 TEMPERATURE = 0.7  # Slightly creative but still coherent
 
+# RAG CONFIGURATION
+CHROMA_PERSIST_DIR = "./chroma_db"
+EMBEDDING_MODEL = "all-MiniLM-L6-v2"
+RAG_TOP_K = 2
+RAG_SIMILARITY_THRESHOLD = 0.5
+
 # MOOD OPTIONS
 # Each mood affects how the AI responds to the user
 MOOD_OPTIONS = {

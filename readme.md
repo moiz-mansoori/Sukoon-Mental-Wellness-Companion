@@ -1,28 +1,31 @@
-# Sukoon - Mental Wellness Companion
+# Sukoon - Advanced RAG Mental Wellness Companion
 
 > *"Sukoon" means peace in Urdu. Everyone deserves a moment of calm.*
 
-Hey there 👋
-
-**Sukoon** is your AI companion for those moments when life feels heavy. Whether you're dealing with anxiety, stress, sadness, or just need someone to listen — Sukoon is here for you.
-
-No judgment. No pressure. Just support.
+**Sukoon** is an advanced, RAG-based AI companion designed to respond like a grounded, emotionally intelligent human — not a chatbot. It's built for those moments when life feels heavy and you need a supportive, non-judgmental presence to sit with you.
 
 ---
 
-## What Can Sukoon Do?
+## What Makes Sukoon Different?
 
-**Listen & Respond** — Have a real conversation about what's on your mind. Sukoon understands context and responds with genuine empathy.
+**🧠 RAG-Based Intelligence** — Sukoon is grounded in a curated knowledge base of wellness wisdom. It retrieves "lived insights" and weaves them naturally into your conversation.
 
-**Match Your Mood** — Feeling anxious? Stressed? Sad? Select your mood and Sukoon adapts its approach to what you need most.
+**❤️ Human-First Responses** — Every response follows a mandatory emotional flow: *Acknowledgment → Validation → Gentle Support → Soft Invitation*. It treats you like a person, not a user.
 
-**Offer Quick Relief** — Sometimes you need something right away:
-- 🌬️ Breathing exercises to calm your nerves
-- 🌍 Grounding techniques to bring you back to the present
-- 💭 Ways to reframe negative thoughts
-- 📝 Journaling prompts to process emotions
-- ✨ Affirmations when you need a reminder of your worth
-- 🧘 Quick meditations for instant calm
+**🕊️ Calm & Grounded** — No bullet points, no instructional tone, and no clinical terminology. Sukoon uses gentle pauses and thoughtful language to create a safe space.
+
+**🌬️ Integrated Wellness Exercises** — Access breathing techniques, grounding practices, and reflective journaling prompts, all humanized and offered with care.
+
+---
+
+## How It Works
+
+Sukoon uses a **Retrieval-Augmented Generation (RAG)** pipeline to ensure its support is grounded in meaningful wellness practices:
+
+1. **Context Retrieval**: Your message is embedded and matched against a local vector database (**ChromaDB**) containing humanized wellness wisdom.
+2. **Emotional Analysis**: Sukoon analyzes your sentiment and detects emotional intensity behind the scenes.
+3. **LLM Generation**: Using **LLaMA 3.3 70B** (via Groq), Sukoon weaves the retrieved wisdom into a human-first response that prioritizes your safety and emotional state.
+4. **Crisis Guardrails**: Built-in safety detection monitors for high distress and gently encourages real-world support when needed.
 
 ---
 
@@ -31,86 +34,83 @@ No judgment. No pressure. Just support.
 **1. Get your free API key**
 → Sign up at [console.groq.com](https://console.groq.com) (takes 2 minutes)
 
-**2. Set up the project**
+**1. Clone the repository**
 ```bash
-git clone https://github.com/moiz-mansoori/AI-Mental-Wellness-Chatbot.git
-cd AI-Mental-Wellness-Chatbot
+git clone https://github.com/moiz-mansoori/Sukoon-Mental-Wellness-Companion.git
+cd Sukoon-Mental-Wellness-Companion
+```
+
+**2. Set up a virtual environment (Recommended)**
+```bash
+python -m venv venv
+.\venv\Scripts\activate
+```
+
+**3. Install dependencies**
+```bash
 pip install -r requirements.txt
 ```
 
-**3. Add your API key**
-Create a `.env` file:
-```
-GROQ_API_KEY=your_key_here
+**4. Configure your environment**
+Create a `.env` file in the root directory:
+```text
+GROQ_API_KEY=your_groq_key_here
+JINA_API_KEY=your_jina_key_here  # Optional: For wellness wisdom search
 ```
 
-**4. Run it**
+**5. Launch Sukoon**
 ```bash
 streamlit run app.py
 ```
-
-That's it. Open `localhost:8501` and start talking.
-
----
-
-## How It Works
-
-Sukoon uses **LLaMA 3.3** through Groq's ultra-fast infrastructure. Responses come back in milliseconds, not seconds — so conversations feel natural and fluid.
-
-The app also includes:
-- **Sentiment detection** to understand how you're feeling
-- **Crisis awareness** to respond appropriately when things get tough
-- **Conversation memory** so it remembers what you've shared
-
----
-
-## A Note on Mental Health
-
-Sukoon is a companion, not a replacement for professional help.
-
-If you're going through something serious, please reach out to a therapist, counselor, or someone you trust. You deserve real support.
 
 ---
 
 ## Built With
 
-- **Streamlit** — Clean, simple interface
-- **Groq API** — Lightning-fast AI responses
-- **LLaMA 3.3 70B** — Smart, empathetic conversations
-- **TextBlob** — Understanding emotional context
+- **Streamlit** — Calming, premium dark-themed interface
+- **Groq API** — Ultra-fast inference with LLaMA 3.3 70B (Core Brain)
+- **ChromaDB** — Local vector storage for wellness wisdom
+- **Jina AI API** — Cloud-based embeddings (High-accuracy translation)
+- **TextBlob** — Emotional sentiment context detection
 
 ---
 
 ## Project Structure
 
-```
-├── app.py                 # Main application
+```text
+├── app.py                 # Main application & UI
+├── rag/                   # RAG Architecture Module
+│   ├── embeddings.py      # Jina AI Cloud Embeddings
+│   ├── vector_store.py    # ChromaDB integration
+│   ├── retriever.py       # Context retrieval logic
+│   └── knowledge_loader.py # KB indexer
+├── knowledge_base/        # Curated Wellness Wisdom (JSON)
+├── prompts/
+│   └── templates.py       # Human-first behavior definition
 ├── config/
 │   └── settings.py        # Configuration & themes
-├── prompts/
-│   └── templates.py       # AI personality & responses
 ├── utils/
 │   ├── sentiment.py       # Emotion detection
-│   ├── crisis_detector.py # Safety responses
-│   └── coping_techniques.py # Exercises & techniques
-├── .env                   # Your API key
+│   ├── crisis_detector.py # Safety guardrails
+│   └── coping_techniques.py # Core wellness exercises
+├── .env                   # Your API keys
 └── requirements.txt       # Dependencies
 ```
 
 ---
 
-## Want to Contribute?
+## A Note on Mental Health
 
-Pull requests are welcome! If you have ideas to make Sukoon better, feel free to open an issue or submit a PR.
+Sukoon is a companion, not a replacement for professional help. If you're going through something serious, please reach out to a therapist, counselor, or a crisis helpline. You deserve real support. 💙
 
 ---
 
 ## The Philosophy
 
-Mental wellness isn't about "fixing" yourself. It's about finding moments of peace amidst the chaos. Sukoon is here to help you find those moments.
+Mental wellness isn't about "fixing" yourself. It's about finding moments of peace amidst the chaos. Sukoon is here to help you find those moments by listening deeply and being truly present.
 
 Take care of yourself. You matter. 💙
 
 ---
 
-*Made with care by Moiz Mansoori*
+*Made by Moiz Ahmed Mansoori*
