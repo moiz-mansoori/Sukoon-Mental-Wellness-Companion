@@ -55,7 +55,6 @@ pip install -r requirements.txt
 Create a `.env` file in the root directory:
 ```text
 GROQ_API_KEY=your_groq_key_here
-JINA_API_KEY=your_jina_key_here  # Optional: For wellness wisdom search
 ```
 
 **5. Launch Sukoon**
@@ -70,7 +69,7 @@ streamlit run app.py
 - **Streamlit** — Calming, premium dark-themed interface
 - **Groq API** — Ultra-fast inference with LLaMA 3.3 70B (Core Brain)
 - **ChromaDB** — Local vector storage for wellness wisdom
-- **Jina AI API** — Cloud-based embeddings (High-accuracy translation)
+- **Sentence Transformers** — Local embedding generation (No API key needed)
 - **TextBlob** — Emotional sentiment context detection
 
 ---
@@ -80,7 +79,7 @@ streamlit run app.py
 ```text
 ├── app.py                 # Main application & UI
 ├── rag/                   # RAG Architecture Module
-│   ├── embeddings.py      # Jina AI Cloud Embeddings
+│   ├── embeddings.py      # Local Embedding Service
 │   ├── vector_store.py    # ChromaDB integration
 │   ├── retriever.py       # Context retrieval logic
 │   └── knowledge_loader.py # KB indexer

@@ -625,13 +625,9 @@ def main():
     if not st.session_state.rag_initialized:
         with st.spinner("Preparing wellness wisdom..."):
             try:
+                # Use local embeddings (no API key needed)
                 embeddings = EmbeddingService()
-                if not embeddings.api_key:
-                    # Silenced for cleaner UI during testing
-                    # st.warning("🕊️ **RAG is ready but waiting for an API key.** Please add `JINA_API_KEY` to your `.env` file to enable wellness wisdom search.")
-                    st.session_state.rag_initialized = True
-                    return
-
+                
                 vector_store = VectorStore(persist_directory="./chroma_db")
                 vector_store.initialize_collection()
                 

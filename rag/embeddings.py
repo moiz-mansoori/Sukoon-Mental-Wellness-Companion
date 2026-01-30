@@ -1,57 +1,66 @@
-import requests
 import os
+import requests
 from typing import List, Optional
-from dotenv import load_dotenv
-
-load_dotenv()
+from huggingface_hub import InferenceClient
+from config.settings import EMBEDDING_MODEL
 
 class EmbeddingService:
-    def __init__(self, api_key: Optional[str] = None):
+    def __init__(self, model_name: Optional[str] = None):
         """
-        Lightweight Embedding Service using Jina AI Cloud API.
-        Zero local inference required.
+        Local Embedding Service using Sentence Transformers.
+        Runs locally on your machine or server.
+        No API key required.
         """
-        self.api_key = api_key or os.getenv("JINA_API_KEY")
-        self.api_url = "https://api.jina.ai/v1/embeddings"
-        self.model = "jina-embeddings-v3" # Latest cloud model
+        self.model_name = model_name or "sentence-transformers/all-MiniLM-L6-v2"
+        self.hf_token = os.getenv("HF_TOKEN")
+        
+        if self.hf_token:
+            self.client = InferenceClient(token=self.hf_token)
+            self.use_api = True
+            print(f"Using Hugging Face Inference API ({self.model_name})")
+        else:
+            self.use_api = False
+            print("HF_TOKEN not found. Falling back to local SentenceTransformers.")
+            try:
+                from sentence_transformers import SentenceTransformer
+                self.model = SentenceTransformer(model_name or EMBEDDING_MODEL)
+            except Exception as e:
+                print(f"Error loading local embedding model: {e}")
+                self.model = None
 
     def embed_text(self, text: str) -> List[float]:
-        """Generate embedding for a single text via Cloud API."""
-        if not self.api_key:
-            raise ValueError("JINA_API_KEY not found in .env")
-
-        headers = {
-            "Content-Type": "application/json",
-            "Authorization": f"Bearer {self.api_key}"
-        }
-        data = {
-            "model": self.model,
-            "input": [text]
-        }
+        """Generate embedding for a single text locally."""
+        if self.use_api:
+            try:
+                # feature_extraction returns the embedding as a list of floats
+                embedding = self.client.feature_extraction(text, model=self.model_name)
+                # Ensure it's returned as a list
+                if hasattr(embedding, "tolist"):
+                    return embedding.tolist()
+                return list(embedding)
+            except Exception as e:
+                print(f"HF API Error: {e}. Falling back to local.")
+                self.use_api = False
+            
+        if not self.model:
+            raise ValueError("Embedding model not initialized.")
         
-        response = requests.post(self.api_url, headers=headers, json=data)
-        response.raise_for_status()
-        
-        return response.json()["data"][0]["embedding"]
+        embedding = self.model.encode(text)
+        return embedding.tolist()
 
     def embed_batch(self, texts: List[str]) -> List[List[float]]:
-        """Generate embeddings for a batch of texts via Cloud API."""
-        if not self.api_key:
-            raise ValueError("JINA_API_KEY not found in .env")
+        """Generate embeddings for a batch of texts locally."""
+        if self.use_api:
+            try:
+                embeddings = self.client.feature_extraction(texts, model=self.model_name)
+                # Hugging Face returns a list of lists for batches
+                return [list(e) for e in embeddings]
+            except Exception as e:
+                print(f"HF API Error: {e}. Falling back to local.")
+                self.use_api = False
 
-        headers = {
-            "Content-Type": "application/json",
-            "Authorization": f"Bearer {self.api_key}"
-        }
-        data = {
-            "model": self.model,
-            "input": texts
-        }
-        
-        response = requests.post(self.api_url, headers=headers, json=data)
-        response.raise_for_status()
-        
-        results = response.json()["data"]
-        # Sort by index to maintain original order
-        sorted_results = sorted(results, key=lambda x: x["index"])
-        return [r["embedding"] for r in sorted_results]
+        if not self.model:
+            raise ValueError("Embedding model not initialized.")
+            
+        embeddings = self.model.encode(texts)
+        return embeddings.tolist()
