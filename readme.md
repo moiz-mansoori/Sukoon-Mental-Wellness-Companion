@@ -8,7 +8,7 @@ If you're here, maybe you're looking for something that listens -- really listen
 
 That's what **Sukoon** is.
 
-It's a **healing human presence in digital form**. Built with therapist-level emotional intelligence, it acknowledges your emotions, validates them, and gently offers support — without rushing you, without fixing you, without sounding like a robot. Because sometimes, you don't need to be fixed. You just need to be heard.
+It's a **healing human presence in digital form**. Built with therapist-level emotional intelligence, it acknowledges your emotions, validates them, and gently offers support without rushing you, without fixing you, without sounding like a robot. Because sometimes, you don't need to be fixed. You just need to be heard.
 
 ---
 
@@ -24,9 +24,9 @@ Sukoon doesn't do that.
 - Validates your feelings before guiding
 - Speaks softly, naturally, like a real person
 
-It speaks in **English**, **Roman Urdu**, or **both mixed together** — whatever feels natural to you. It detects your language automatically and mirrors your style.
+It speaks in **English**, **Roman Urdu**, or **both mixed together** whatever feels natural to you. It detects your language automatically and mirrors your style.
 
-And if things get heavy? Sukoon has built-in safety features that recognize when you might need real human support, and it gently points you there — like a friend, not an alarm.
+And if things get heavy? Sukoon has built-in safety features that recognize when you might need real human support, and it gently points you there, like a friend, not an alarm.
 
 ---
 
@@ -206,7 +206,7 @@ Want to share Sukoon with others? You can deploy it on Streamlit Cloud for free:
 
 Sukoon is a companion, not a replacement for professional help.
 
-If you're going through something serious — please reach out to a therapist, counselor, or crisis helpline. You deserve real, human support.
+If you're going through something serious, please reach out to a therapist, counselor, or crisis helpline. You deserve real, human support.
 
 This tool is here to sit with you in the in-between moments. To help you breathe. To remind you that your feelings are valid.
 
@@ -218,7 +218,7 @@ Mental wellness isn't about fixing yourself. It's about finding small moments of
 
 Sukoon is built on one belief: **healing comes from presence, not instructions.**
 
-It doesn't lecture. It doesn't rush. It just listens — deeply, softly, like someone who truly cares.
+It doesn't lecture. It doesn't rush. It just listens deeply, softly, like someone who truly cares.
 
 Take care of yourself. You matter. 
 
