@@ -125,23 +125,24 @@ def format_sentiment_for_prompt(sentiment_result: Dict) -> str:
     Format sentiment analysis into a prompt modifier for the AI.
     
     This helps the AI understand the user's emotional state and respond appropriately.
+    Framed as gentle guidance, not clinical labels.
     """
     intensity = sentiment_result["emotional_intensity"]
     emotions = sentiment_result.get("negative_indicators", [])
     
     if intensity == "severe":
-        return f"""[EMOTIONAL STATE: HIGH DISTRESS]
-The user appears to be in significant emotional distress. 
-Detected indicators: {', '.join(emotions) if emotions else 'general distress'}
-Response approach: Maximum warmth, validation, gentle support. Consider if crisis check is needed."""
+        return f"""[EMOTIONAL AWARENESS]
+The user is carrying something very heavy right now. 
+What you're sensing: {', '.join(emotions) if emotions else 'deep pain'}
+Be fully present. Sit with them before offering anything. Maximum warmth, maximum gentleness. Let them feel heard first."""
     
     elif intensity == "moderate":
-        return f"""[EMOTIONAL STATE: MODERATE CONCERN]
-The user is experiencing notable emotional difficulty.
-Detected indicators: {', '.join(emotions) if emotions else 'moderate concern'}
-Response approach: Warm, supportive, offer coping techniques if appropriate."""
+        return f"""[EMOTIONAL AWARENESS]
+The user is going through a difficult moment.
+What you're sensing: {', '.join(emotions) if emotions else 'emotional weight'}
+Be warm and present. Validate what they're feeling. Only offer gentle support if it feels natural."""
     
     else:
-        return """[EMOTIONAL STATE: STABLE]
-The user appears emotionally stable or mildly concerned.
-Response approach: Friendly, supportive, maintain positive engagement."""
+        return """[EMOTIONAL AWARENESS]
+The user seems relatively steady right now.
+Stay warm, be present, maintain a safe and gentle space for whatever they want to share."""

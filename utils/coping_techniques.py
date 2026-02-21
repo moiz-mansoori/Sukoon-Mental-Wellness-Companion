@@ -1,9 +1,3 @@
-# COPING TECHNIQUES MODULE
-"""
-Evidence-based coping techniques for stress relief and emotional regulation.
-Includes breathing exercises, grounding techniques, CBT reframing, and journaling prompts.
-"""
-
 import random
 from typing import List, Dict
 

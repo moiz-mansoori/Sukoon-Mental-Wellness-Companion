@@ -112,16 +112,18 @@ def get_crisis_response(severity: str) -> str:
     if severity == "high":
         return """I'm really glad you reached out, and I want you to know that what you're feeling matters deeply. Thank you for trusting me with something so important. 💙
 
-What you've shared tells me you're going through an incredibly difficult time, and I'm genuinely concerned about you. **You deserve support from someone who can really help.**
+What you've shared tells me you're going through an incredibly difficult time, and I'm genuinely concerned about you. You deserve support from someone who can really be there for you, a real human voice who can hold this with you.
 
-**You are not alone in this.** There are people who care about you and want to help. Would you be willing to reach out to one of these resources? I'm also here to keep talking with you."""
+You are not alone in this. There are people who care about you and want to help. Would you be willing to reach out to someone? You can call or text 988 in the US or Canada. Or even just tell someone you trust what you're going through right now.
+
+I'm still here with you. I'm not going anywhere. 💙"""
 
     elif severity == "medium":
         return """I hear that you're in a really tough place right now, and I want you to know that I take what you've shared seriously. 💙
 
-What you're describing sounds really painful, and you deserve support. I'm here for you.
+What you're describing sounds really painful, and you deserve support. You don't have to face this alone.
 
-You don't have to face this alone. Is there someone in your life you trust that you could reach out to?
+Is there someone in your life you trust that you could reach out to? Sometimes just hearing another person's voice can make things feel a little less heavy.
 
 I'm still here with you. Would you like to talk more about what you're going through?"""
 
@@ -158,30 +160,26 @@ def format_crisis_for_prompt(crisis_result: Dict) -> str:
     This helps the AI understand the context and respond appropriately.
     """
     if crisis_result["severity"] == "high":
-        return """[CRISIS ALERT: HIGH PRIORITY]
-User has expressed language indicating potential immediate crisis.
-Response requirements:
-- Lead with compassion and validation
-- Prioritize safety resources
-- Encourage professional help
-- Do NOT attempt to 'solve' or minimize
-- Stay calm and non-judgmental"""
+        return """[SAFETY AWARENESS: URGENT]
+The user has expressed language suggesting deep pain and possible immediate crisis.
+Be fully present. Lead with compassion and validation.
+Gently encourage connecting with a real person who can help.
+Do NOT minimize, lecture, or try to fix. Just be there.
+Stay calm, stay warm, stay human."""
     
     elif crisis_result["severity"] == "medium":
-        return """[CONCERN ALERT: MEDIUM PRIORITY]
-User has expressed concerning language about self-harm.
-Response requirements:
-- Be extra gentle and caring
-- Mention resources naturally
-- Check in about their safety
-- Encourage speaking to someone they trust"""
+        return """[SAFETY AWARENESS: CONCERNING]
+The user has expressed concerning language about self-harm.
+Be extra gentle and caring.
+Naturally mention that support is available.
+Check in about how they're doing.
+Encourage speaking to someone they trust."""
     
     elif crisis_result["severity"] == "low":
-        return """[CONCERN ALERT: LOW PRIORITY]
-User has expressed some concerning language.
-Response requirements:
-- Be extra supportive and validating
-- Monitor for escalation
-- Gently remind them help is available"""
+        return """[SAFETY AWARENESS: GENTLE]
+The user has expressed some heavy, concerning language.
+Be extra supportive and validating.
+Stay present and watch for any escalation.
+Gently remind them that help is always available."""
     
     return ""

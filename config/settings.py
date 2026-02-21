@@ -29,8 +29,8 @@ GROQ_API_KEY = get_api_key()
 GROQ_MODEL = "llama-3.3-70b-versatile"
 
 # Response generation settings
-MAX_TOKENS = 500
-TEMPERATURE = 0.7  # Slightly creative but still coherent
+MAX_TOKENS = 600
+TEMPERATURE = 0.8  # More natural, human-sounding variation
 
 # RAG CONFIGURATION
 CHROMA_PERSIST_DIR = "./chroma_db"
@@ -67,25 +67,6 @@ MOOD_OPTIONS = {
         "prompt_modifier": "The user is feeling calm. Maintain this positive state and be supportive."
     }
 }
-
-# EMERGENCY HELPLINES (Customize for your region)
-EMERGENCY_HELPLINES = """
-🆘 **If you're in crisis, please reach out:**
-
-🇺🇸 **USA**: National Suicide Prevention Lifeline: **988** or **1-800-273-8255**
-🇬🇧 **UK**: Samaritans: **116 123**
-🇨🇦 **Canada**: Crisis Services Canada: **1-833-456-4566**
-🇦🇺 **Australia**: Lifeline: **13 11 14**
-🇮🇳 **India**: iCall: **9152987821** | Vandrevala Foundation: **1860-2662-345**
-🇵🇰 **Pakistan**: Umang Helpline: **0311-7786264**
-
-💡 **You can also:**
-- Text HOME to **741741** (Crisis Text Line - USA)
-- Contact a trusted friend, family member, or therapist
-- Go to your nearest emergency room
-
-**You are not alone. Help is available. 💙**
-"""
 
 # SAFETY DISCLAIMER
 SAFETY_DISCLAIMER = """

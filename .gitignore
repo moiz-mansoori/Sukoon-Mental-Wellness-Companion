@@ -1,6 +1,4 @@
-# ============================================================
-# AI Mental Wellness Chatbot - Git Ignore
-# ============================================================
+
 
 # Environment variables (contains API keys)
 .env

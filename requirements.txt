@@ -1,7 +1,15 @@
+# Core
 streamlit>=1.32.0
 groq>=0.9.0
-textblob>=0.18.0
 python-dotenv>=1.0.0
+
+# NLP & Sentiment
+textblob>=0.18.0
+
+# RAG Pipeline
 chromadb>=0.4.0
-requests>=2.31.0
 huggingface_hub>=0.20.0
+sentence-transformers>=2.2.0
+
+# HTTP
+requests>=2.31.0

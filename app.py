@@ -13,7 +13,6 @@ import os
 from config.settings import (
     MOOD_OPTIONS, 
     SAFETY_DISCLAIMER, 
-    EMERGENCY_HELPLINES,
     THEME_COLORS,
     QUICK_ACTIONS,
     GROQ_API_KEY,
@@ -34,6 +33,8 @@ from utils import (
     detect_crisis,
     get_crisis_response,
     format_crisis_for_prompt,
+    detect_language,
+    format_language_context,
     get_breathing_exercise,
     format_breathing_exercise,
     get_grounding_exercise,
@@ -365,6 +366,11 @@ def generate_response(user_message: str, mood_context: str = "") -> str:
     # Build context for the message
     context_parts = []
     
+    # 0. Language Detection - Respond in user's language
+    language_context = format_language_context(user_message)
+    if language_context:
+        context_parts.append(language_context)
+    
     # 1. RAG Retrieval - Treat as lived wisdom
     try:
         if "retriever" in st.session_state:
@@ -397,7 +403,7 @@ def generate_response(user_message: str, mood_context: str = "") -> str:
         messages = [{"role": "system", "content": SYSTEM_PROMPT}]
         
         # Add conversation history for context
-        for msg in st.session_state.conversation_history[-6:]:  # Keep last 6 messages for context
+        for msg in st.session_state.conversation_history[-10:]:  # Keep last 10 messages for therapist-like continuity
             messages.append(msg)
         
         # Add current user message
@@ -576,28 +582,21 @@ def render_chat_interface():
     chat_container = st.container()
     
     with chat_container:
-        # Display chat messages
         for message in st.session_state.messages:
             with st.chat_message(message["role"], avatar="🧘" if message["role"] == "assistant" else "👤"):
                 st.markdown(message["content"])
     
-    # Chat input
     if prompt := st.chat_input("Share what's on your mind... 💭"):
-        # Mark conversation as started
         if not st.session_state.conversation_started:
             st.session_state.conversation_started = True
         
-        # Add user message
         st.session_state.messages.append({"role": "user", "content": prompt})
         
-        # Display user message
         with st.chat_message("user", avatar="👤"):
             st.markdown(prompt)
         
-        # Generate and display assistant response
         with st.chat_message("assistant", avatar="🧘"):
             with st.spinner("Thinking with care..."):
-                # Get mood context if mood is selected
                 mood_context = ""
                 if st.session_state.mood_key:
                     mood_context = MOOD_PROMPTS.get(st.session_state.mood_key, "")

@@ -5,6 +5,7 @@ Utility modules for the Mental Wellness Chatbot.
 
 from .sentiment import analyze_sentiment, get_empathy_level, format_sentiment_for_prompt
 from .crisis_detector import detect_crisis, get_crisis_response, format_crisis_for_prompt
+from .language_detector import detect_language, format_language_context
 from .coping_techniques import (
     get_breathing_exercise,
     format_breathing_exercise,
@@ -28,6 +29,9 @@ __all__ = [
     "detect_crisis",
     "get_crisis_response",
     "format_crisis_for_prompt",
+    # Language
+    "detect_language",
+    "format_language_context",
     # Coping
     "get_breathing_exercise",
     "format_breathing_exercise",
